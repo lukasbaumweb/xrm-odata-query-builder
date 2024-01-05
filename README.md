@@ -104,7 +104,7 @@ To run tests, run the following command
 ### Must have
 - [x] Selecting
 - [x] Ordering
-- [ ] Expanding
+- [x] Expanding
 - [ ] Filtering
 - [ ] Pagination
 - [ ] Counting
