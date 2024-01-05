@@ -61,6 +61,20 @@ test("should add orderby query", () => {
   expect(queryBuilder.build()).toBe("/accounts?$select=accountid,name,description,revenue&$orderby=name asc,revenue desc");
 });
 
+test("should throw error if user tries to add the same column twice as orderBy clause", () => {
+  try {
+    const queryBuilder = new QueryBuilder("account");
+    queryBuilder.select("accountid", "name", "description", "revenue");
+    queryBuilder.orderBy("name", "asc");
+    expect(queryBuilder.build()).toBe("/accounts?$select=accountid,name,description,revenue&$orderby=name asc");
+
+    queryBuilder.orderBy("name", "desc");
+    expect(queryBuilder.build()).toBe("/accounts?$select=accountid,name,description,revenue&$orderby=name asc,revenue desc");
+  } catch (e) {
+    expect((e as { message: string }).message).toBe(`Column "name" is already in the order by clause`);
+  }
+});
+
 test("should encode query", () => {
   const queryBuilder = new QueryBuilder("account", { encodeURI: true });
   queryBuilder.select("accountid", "name", "description", "revenue");

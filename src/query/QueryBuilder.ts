@@ -56,8 +56,23 @@ export class QueryBuilder<Column> {
     return this;
   }
 
+  /**
+   * Adds an order by clause to the query.
+   * @param column The column to order by.
+   * @param direction The direction of the ordering. Default is "asc".
+   * @returns The QueryBuilder instance.
+   * @example
+   * const queryBuilder = new QueryBuilder("test");
+   * queryBuilder.orderBy("id", "desc");
+   * queryBuilder.orderBy("name");
+   */
   orderBy(column: Column, direction: OrderByDirection = "asc"): QueryBuilder<Column> {
     if (!this.query.orderBy) this.query.orderBy = new Set<OrderBy<Column>>();
+
+    if (Array.from(this.query.orderBy).some((o) => o.column === column)) {
+      throw new Error(`Column "${column}" is already in the order by clause`);
+    }
+
     this.query.orderBy.add({ column, direction });
     return this;
   }
