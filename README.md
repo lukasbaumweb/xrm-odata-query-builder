@@ -7,6 +7,10 @@ The Dynamics365QueryBuilder is a specialized TypeScript library tailored for bui
 Dynamics 365, a suite of business applications, utilizes OData as its underlying protocol, and this library streamlines the process of constructing queries for Dynamics 365 services.
 
 
+## Important Notice
+
+This project is currently work in progress and should not be used in production. You can use this library for pre building your queries
+
 ## Features
 
 **### WORK IN PROGRESS ###**
@@ -29,28 +33,18 @@ Install xrm-odata-query-builder with npm
     
 ## Usage/Examples
 
+### Build simple query
+
 ```typescript
 import { QueryBuilder } from "xrm-odata-query-builder";
 
 const simpleSelectQuery = new QueryBuilder("account");
 simpleSelectQuery.select("revenue", "name");
-simpleSelectQuery.build() //account?$select=accountid,name
-
+simpleSelectQuery.build() 
+// /accounts?$select=accountid,name
 ```
 
-```typescript
-import { QueryBuilder } from "xrm-odata-query-builder";
-
-const fullURLQuery = new QueryBuilder("account", {
-  includeFullAPIPath: true,
-  apiVersion: "9.2",
-  orgURL: "https://example.api.crm4.dynamics.com",
-});
-fullURLQuery.select("revenue", "name");
-fullURLQuery.build(); // https://example.api.crm4.dynamics.com/api/data/9.2/account?select=revenue,name
-
-```
-
+### Add your entity as type
 
 ```typescript
 import { QueryBuilder } from "xrm-odata-query-builder";
@@ -64,11 +58,41 @@ type accountColumns = {
 };
 
 const strictColumnNamesQuery = new QueryBuilder<keyof accountColumns>("account");
-strictColumnNamesQuery.select("accountid","description", "revenue", "name");
-strictColumnNamesQuery.build() //account?$select=accountid,name,description,revenue
-
+strictColumnNamesQuery.select("accountid", "description", "revenue", "name");
+strictColumnNamesQuery.build() 
+// /accounts?$select=accountid,name,description,revenue
 ```
 
+### Add Organization and API Details
+
+```typescript
+import { QueryBuilder } from "xrm-odata-query-builder";
+
+const fullURLQuery = new QueryBuilder("account", {
+  includeFullAPIPath: true,
+  apiVersion: "9.2",
+  orgURL: "https://example.api.crm4.dynamics.com",
+});
+fullURLQuery.select("revenue", "name");
+fullURLQuery.build(); 
+// https://example.api.crm4.dynamics.com/api/data/9.2/accounts?select=revenue,name
+```
+
+### Expand Query
+
+```typescript
+import { QueryBuilder } from "xrm-odata-query-builder";
+
+ const queryBuilder = new QueryBuilder("account");
+  queryBuilder.select("accountid", "name", "description", "revenue");
+
+  queryBuilder.expand(
+    new InnerQuery("transactioncurrencyid").select("transactioncurrencyid", "currencyname").orderBy("transactioncurrencyid", "asc")
+  );
+
+  queryBuilder.build();
+// /accounts?$select=accountid,name,description,revenue&$expand=transactioncurrencyid($select=transactioncurrencyid,currencyname;$orderby=transactioncurrencyid asc)
+```
 
 ## Running Tests
 
@@ -78,25 +102,35 @@ To run tests, run the following command
   npm run test
 ```
 
-
 ## Roadmap
 
-- [ ] Selecting
-- [ ] Ordering
-- [ ] Expanding
+### Must have
+- [x] Selecting
+- [x] Ordering
+- [x] Expanding
 - [ ] Filtering
 - [ ] Pagination
 - [ ] Counting
+- [ ] Compilation (Add Option for building queries during compilation)
+- [ ] Transform OData Queries to human readable format
 - [ ] browser support
+
+### Nice to have
+
+- [ ] Check for semantic errors like "Only $select and $filter clause can be provided while doing $expand on many-to-one relationship or nested one-to-many relationship."
 
 ## Related
 
-Here are some related projects
+Here are some related projects and sources
 
-[odata-query](https://www.npmjs.com/package/odata-query)
-[more-xrm](https://www.npmjs.com/package/more-xrm)
+### Projects
 
-[Microsoft Learn](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/query-data-web-api)
+- [odata-query](https://www.npmjs.com/package/odata-query)
+- [more-xrm](https://www.npmjs.com/package/more-xrm)
+
+### Sources
+
+- [Microsoft Learn](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/query-data-web-api)
 
 ## Authors
 
