@@ -28,7 +28,7 @@ This project is currently work in progress and should not be used in production.
 Install xrm-odata-query-builder with npm
 
 ```bash
-  npm install xrm-odata-query-builder
+npm install xrm-odata-query-builder
 ```
     
 ## Usage/Examples
@@ -83,12 +83,12 @@ fullURLQuery.build();
 ```typescript
 import { QueryBuilder } from "xrm-odata-query-builder";
 
- const queryBuilder = new QueryBuilder("account");
-  queryBuilder.select("accountid", "name", "description", "revenue");
+const queryBuilder = new QueryBuilder("account");
+queryBuilder.select("accountid", "name", "description", "revenue");
 
-  queryBuilder.expand(
-    new InnerQuery("transactioncurrencyid").select("transactioncurrencyid", "currencyname").orderBy("transactioncurrencyid", "asc")
-  );
+queryBuilder.expand(
+  new InnerQuery("transactioncurrencyid").select("transactioncurrencyid", "currencyname").orderBy("transactioncurrencyid", "asc")
+);
 
   queryBuilder.build();
 // /accounts?$select=accountid,name,description,revenue&$expand=transactioncurrencyid($select=transactioncurrencyid,currencyname;$orderby=transactioncurrencyid asc)
@@ -99,7 +99,7 @@ import { QueryBuilder } from "xrm-odata-query-builder";
 To run tests, run the following command
 
 ```bash
-  npm run test
+npm run test
 ```
 
 ## Roadmap
