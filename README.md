@@ -29,7 +29,6 @@ Install xrm-odata-query-builder with npm
     
 ## Usage/Examples
 
-
 ### Build simple query
 
 ```typescript
@@ -38,9 +37,7 @@ import { QueryBuilder } from "xrm-odata-query-builder";
 const simpleSelectQuery = new QueryBuilder("account");
 simpleSelectQuery.select("revenue", "name");
 simpleSelectQuery.build() 
-
-//accounts?$select=accountid,name
-
+// /accounts?$select=accountid,name
 ```
 
 ### Add your entity as type
@@ -59,9 +56,7 @@ type accountColumns = {
 const strictColumnNamesQuery = new QueryBuilder<keyof accountColumns>("account");
 strictColumnNamesQuery.select("accountid", "description", "revenue", "name");
 strictColumnNamesQuery.build() 
-
-//accounts?$select=accountid,name,description,revenue
-
+// /accounts?$select=accountid,name,description,revenue
 ```
 
 ### Add Organization and API Details
@@ -76,9 +71,23 @@ const fullURLQuery = new QueryBuilder("account", {
 });
 fullURLQuery.select("revenue", "name");
 fullURLQuery.build(); 
-
 // https://example.api.crm4.dynamics.com/api/data/9.2/accounts?select=revenue,name
+```
 
+### Expand Query
+
+```typescript
+import { QueryBuilder } from "xrm-odata-query-builder";
+
+ const queryBuilder = new QueryBuilder("account");
+  queryBuilder.select("accountid", "name", "description", "revenue");
+
+  queryBuilder.expand(
+    new InnerQuery("transactioncurrencyid").select("transactioncurrencyid", "currencyname").orderBy("transactioncurrencyid", "asc")
+  );
+
+  queryBuilder.build();
+// /accounts?$select=accountid,name,description,revenue&$expand=transactioncurrencyid($select=transactioncurrencyid,currencyname;$orderby=transactioncurrencyid asc)
 ```
 
 ## Running Tests
@@ -92,6 +101,7 @@ To run tests, run the following command
 
 ## Roadmap
 
+### Must have
 - [x] Selecting
 - [x] Ordering
 - [ ] Expanding
@@ -99,6 +109,10 @@ To run tests, run the following command
 - [ ] Pagination
 - [ ] Counting
 - [ ] browser support
+
+### Nice to have
+
+- [ ] Check for semantic errors like "Only $select and $filter clause can be provided while doing $expand on many-to-one relationship or nested one-to-many relationship."
 
 ## Related
 

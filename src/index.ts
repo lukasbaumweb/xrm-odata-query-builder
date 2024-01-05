@@ -1,4 +1,4 @@
 import { QueryBuilder } from "./query/QueryBuilder";
-import { Query } from "./types/Query";
+import { InnerQuery } from "./query/InnerQuery";
 
-export { QueryBuilder, Query };
+export { QueryBuilder, InnerQuery };

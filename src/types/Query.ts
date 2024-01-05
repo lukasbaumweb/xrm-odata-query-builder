@@ -1,3 +1,5 @@
+import { QueryBuilder } from "../query/QueryBuilder";
+
 export type OrderByDirection = "asc" | "desc";
 export interface OrderBy<Column> {
   column: Column;
@@ -9,5 +11,6 @@ export interface Query<Column> {
   select?: Set<Column>;
   filter?: Set<string>;
   orderBy?: Set<OrderBy<Column>>;
+  expand?: Set<QueryBuilder<Column>>;
   groupBy?: Set<string>;
 }

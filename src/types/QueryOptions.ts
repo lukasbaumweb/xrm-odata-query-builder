@@ -2,8 +2,6 @@
  * Represents the options for a query.
  */
 export type QueryOptions = {
-  // TODO: Add support for this option
-  includeAnnotations?: boolean;
   encodeURI?: boolean;
   ignorePluralization?: boolean;
 } & (
@@ -18,3 +16,10 @@ export type QueryOptions = {
       orgURL?: string;
     }
 );
+
+/**
+ * Represents the options for a inner/expanded query.
+ */
+export type InnerQueryOptions = {
+  ignorePluralization?: boolean;
+};

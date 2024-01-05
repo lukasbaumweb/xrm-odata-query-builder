@@ -1,4 +1,4 @@
-import { QueryBuilder } from "./index";
+import { InnerQuery, QueryBuilder } from "./index";
 
 test("select columns are added", () => {
   const queryBuilder = new QueryBuilder("account");
@@ -80,4 +80,37 @@ test("should encode query", () => {
   queryBuilder.select("accountid", "name", "description", "revenue");
   queryBuilder.orderBy("name", "asc");
   expect(queryBuilder.build()).toBe("/accounts?$select=accountid,name,description,revenue&$orderby=name%20asc");
+});
+
+test("should expand query without selected columns", () => {
+  const queryBuilder = new QueryBuilder("account", { encodeURI: true });
+  queryBuilder.select("accountid", "name", "description", "revenue");
+
+  queryBuilder.expand(new InnerQuery("transactioncurrencyid"));
+
+  expect(queryBuilder.build()).toBe("/accounts?$select=accountid,name,description,revenue&$expand=transactioncurrencyid");
+});
+
+test("should expand query with selected columns", () => {
+  const queryBuilder = new QueryBuilder("account");
+  queryBuilder.select("accountid", "name", "description", "revenue");
+
+  queryBuilder.expand(new InnerQuery("transactioncurrencyid").select("transactioncurrencyid", "currencyname"));
+
+  expect(queryBuilder.build()).toBe(
+    "/accounts?$select=accountid,name,description,revenue&$expand=transactioncurrencyid($select=transactioncurrencyid,currencyname)"
+  );
+});
+
+test("expanded query should allow default query methods like orderBy and select", () => {
+  const queryBuilder = new QueryBuilder("account");
+  queryBuilder.select("accountid", "name", "description", "revenue");
+
+  queryBuilder.expand(
+    new InnerQuery("transactioncurrencyid").select("transactioncurrencyid", "currencyname").orderBy("transactioncurrencyid", "asc")
+  );
+
+  expect(queryBuilder.build()).toBe(
+    "/accounts?$select=accountid,name,description,revenue&$expand=transactioncurrencyid($select=transactioncurrencyid,currencyname;$orderby=transactioncurrencyid asc)"
+  );
 });
