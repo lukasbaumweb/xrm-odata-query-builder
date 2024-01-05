@@ -29,28 +29,21 @@ Install xrm-odata-query-builder with npm
     
 ## Usage/Examples
 
+
+### Build simple query
+
 ```typescript
 import { QueryBuilder } from "xrm-odata-query-builder";
 
 const simpleSelectQuery = new QueryBuilder("account");
 simpleSelectQuery.select("revenue", "name");
-simpleSelectQuery.build() //account?$select=accountid,name
+simpleSelectQuery.build() 
+
+//account?$select=accountid,name
 
 ```
 
-```typescript
-import { QueryBuilder } from "xrm-odata-query-builder";
-
-const fullURLQuery = new QueryBuilder("account", {
-  includeFullAPIPath: true,
-  apiVersion: "9.2",
-  orgURL: "https://example.api.crm4.dynamics.com",
-});
-fullURLQuery.select("revenue", "name");
-fullURLQuery.build(); // https://example.api.crm4.dynamics.com/api/data/9.2/account?select=revenue,name
-
-```
-
+### Add your entity as type
 
 ```typescript
 import { QueryBuilder } from "xrm-odata-query-builder";
@@ -64,11 +57,29 @@ type accountColumns = {
 };
 
 const strictColumnNamesQuery = new QueryBuilder<keyof accountColumns>("account");
-strictColumnNamesQuery.select("accountid","description", "revenue", "name");
-strictColumnNamesQuery.build() //account?$select=accountid,name,description,revenue
+strictColumnNamesQuery.select("accountid", "description", "revenue", "name");
+strictColumnNamesQuery.build() 
+
+//account?$select=accountid,name,description,revenue
 
 ```
 
+### Add Organization and API Details
+
+```typescript
+import { QueryBuilder } from "xrm-odata-query-builder";
+
+const fullURLQuery = new QueryBuilder("account", {
+  includeFullAPIPath: true,
+  apiVersion: "9.2",
+  orgURL: "https://example.api.crm4.dynamics.com",
+});
+fullURLQuery.select("revenue", "name");
+fullURLQuery.build(); 
+
+// https://example.api.crm4.dynamics.com/api/data/9.2/account?select=revenue,name
+
+```
 
 ## Running Tests
 
@@ -81,7 +92,7 @@ To run tests, run the following command
 
 ## Roadmap
 
-- [ ] Selecting
+- [x] Selecting
 - [ ] Ordering
 - [ ] Expanding
 - [ ] Filtering
@@ -91,12 +102,16 @@ To run tests, run the following command
 
 ## Related
 
-Here are some related projects
+Here are some related projects and sources
 
-[odata-query](https://www.npmjs.com/package/odata-query)
-[more-xrm](https://www.npmjs.com/package/more-xrm)
+### Projects
 
-[Microsoft Learn](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/query-data-web-api)
+- [odata-query](https://www.npmjs.com/package/odata-query)
+- [more-xrm](https://www.npmjs.com/package/more-xrm)
+
+### Sources
+
+- [Microsoft Learn](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/query-data-web-api)
 
 ## Authors
 
