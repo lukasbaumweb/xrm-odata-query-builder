@@ -4,6 +4,8 @@
 export type QueryOptions = {
   // TODO: Add support for this option
   includeAnnotations?: boolean;
+  encodeURI?: boolean;
+  ignorePluralization?: boolean;
 } & (
   | {
       includeFullAPIPath: true;

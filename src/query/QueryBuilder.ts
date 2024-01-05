@@ -1,4 +1,4 @@
-import { Query } from "../types/Query";
+import { OrderBy, OrderByDirection, Query } from "../types/Query";
 import { QueryOptions } from "../types/QueryOptions";
 
 /**
@@ -23,6 +23,9 @@ export class QueryBuilder<Column> {
     if (this.query.logicalName === undefined) {
       throw new Error("Invalid query: logicalName is required");
     }
+
+    // Make sure the logical name is plural
+    if (!options?.ignorePluralization && this.query.logicalName.charAt(-1) !== "s") this.query.logicalName += "s";
 
     this.options = options ?? {};
   }
@@ -53,18 +56,19 @@ export class QueryBuilder<Column> {
     return this;
   }
 
-  validate(): boolean {
-    if (!this.query.logicalName) return false;
-    return true;
+  orderBy(column: Column, direction: OrderByDirection = "asc"): QueryBuilder<Column> {
+    if (!this.query.orderBy) this.query.orderBy = new Set<OrderBy<Column>>();
+    this.query.orderBy.add({ column, direction });
+    return this;
   }
 
   private validateAndThrow(): void {
     if (!this.query.logicalName) throw new Error("Invalid query: logicalName is invalid or missing");
   }
 
-  private removeTrailingQuestionMark = (query: string): string => {
-    return query.indexOf("?") === query.length - 1 ? query.slice(0, -1) : query;
-  };
+  // private removeTrailingQuestionMark = (query: string): string => {
+  //   return query.indexOf("?") === query.length - 1 ? query.slice(0, -1) : query;
+  // };
 
   /**
    * Builds the query
@@ -78,20 +82,30 @@ export class QueryBuilder<Column> {
   build(): string {
     this.validateAndThrow();
 
+    const urlPath: string[] = [];
+
     const finalQuery: string[] = [];
 
     if (this.options.includeFullAPIPath)
-      finalQuery.push(`${this.options.orgURL ?? "https://example.api.crm4.dynamics.com"}/api/data/${this.options.apiVersion ?? "v9.1"}`);
+      urlPath.push(`${this.options.orgURL ?? "https://example.api.crm4.dynamics.com"}/api/data/${this.options.apiVersion ?? "v9.1"}`);
 
-    finalQuery.push(`/${this.query.logicalName}?`);
+    urlPath.push(`/${this.query.logicalName}?`);
 
     if (this.query.select !== undefined) {
       finalQuery.push(`$select=${Array.from(this.query.select)?.join(",")}`);
     }
 
-    const query = `${this.removeTrailingQuestionMark(finalQuery.join(""))}`;
+    if (this.query.orderBy !== undefined) {
+      finalQuery.push(
+        `$orderby=${Array.from(this.query.orderBy)
+          ?.map((o) => `${o.column} ${o.direction}`)
+          ?.join(",")}`
+      );
+    }
+
+    const query = `${urlPath.join("")}${finalQuery.join("&")}`;
     console.debug(query);
 
-    return query;
+    return this.options.encodeURI ? encodeURI(query) : query;
   }
 }

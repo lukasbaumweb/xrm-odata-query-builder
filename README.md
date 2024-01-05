@@ -39,7 +39,7 @@ const simpleSelectQuery = new QueryBuilder("account");
 simpleSelectQuery.select("revenue", "name");
 simpleSelectQuery.build() 
 
-//account?$select=accountid,name
+//accounts?$select=accountid,name
 
 ```
 
@@ -60,7 +60,7 @@ const strictColumnNamesQuery = new QueryBuilder<keyof accountColumns>("account")
 strictColumnNamesQuery.select("accountid", "description", "revenue", "name");
 strictColumnNamesQuery.build() 
 
-//account?$select=accountid,name,description,revenue
+//accounts?$select=accountid,name,description,revenue
 
 ```
 
@@ -77,7 +77,7 @@ const fullURLQuery = new QueryBuilder("account", {
 fullURLQuery.select("revenue", "name");
 fullURLQuery.build(); 
 
-// https://example.api.crm4.dynamics.com/api/data/9.2/account?select=revenue,name
+// https://example.api.crm4.dynamics.com/api/data/9.2/accounts?select=revenue,name
 
 ```
 
@@ -93,7 +93,7 @@ To run tests, run the following command
 ## Roadmap
 
 - [x] Selecting
-- [ ] Ordering
+- [x] Ordering
 - [ ] Expanding
 - [ ] Filtering
 - [ ] Pagination
