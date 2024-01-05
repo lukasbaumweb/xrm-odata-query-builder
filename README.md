@@ -1,7 +1,8 @@
 
-# XRM OData Querybuilder (WORK IN PROGRESS)
+# XRM OData Querybuilder
 
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
+[![codecov](https://codecov.io/gh/lukasbaumweb/xrm-odata-query-builder/graph/badge.svg?token=68DY9H15WM)](https://codecov.io/gh/lukasbaumweb/xrm-odata-query-builder)
 
 The Dynamics365QueryBuilder is a specialized TypeScript library tailored for building OData queries specifically designed for Microsoft Dynamics 365 APIs.  
 Dynamics 365, a suite of business applications, utilizes OData as its underlying protocol, and this library streamlines the process of constructing queries for Dynamics 365 services.
