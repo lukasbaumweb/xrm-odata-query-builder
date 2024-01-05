@@ -7,6 +7,10 @@ The Dynamics365QueryBuilder is a specialized TypeScript library tailored for bui
 Dynamics 365, a suite of business applications, utilizes OData as its underlying protocol, and this library streamlines the process of constructing queries for Dynamics 365 services.
 
 
+## Important Notice
+
+This project is currently work in progress and should not be used in production. You can use this library for pre building your queries
+
 ## Features
 
 **### WORK IN PROGRESS ###**
@@ -98,7 +102,6 @@ To run tests, run the following command
   npm run test
 ```
 
-
 ## Roadmap
 
 ### Must have
@@ -108,6 +111,8 @@ To run tests, run the following command
 - [ ] Filtering
 - [ ] Pagination
 - [ ] Counting
+- [ ] Compilation (Add Option for building queries during compilation)
+- [ ] Transform OData Queries to human readable format
 - [ ] browser support
 
 ### Nice to have
